@@ -38,7 +38,7 @@ public class LoginActivity extends AppCompatActivity {
                 "select id from login where login='" + user + "' and pass ='" + pass +"'", null);
 
         if (fila.moveToFirst()) {
-            Intent intent = new Intent(getApplicationContext(), ProfileActivity.class);
+            Intent intent = new Intent(getApplicationContext(), IndexActivity.class);
             intent.putExtra("id",fila.getString(0));
             startActivity(intent);
 

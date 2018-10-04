@@ -15,15 +15,22 @@ public class AdminSQLiteOpenHelper extends SQLiteOpenHelper {
 
     public AdminSQLiteOpenHelper(Context context, SQLiteDatabase.CursorFactory factory) {
         super(context, DATABASE_NAME, factory, DATABASE_VERSION);
+        //context.deleteDatabase(DATABASE_NAME);
     }
+
     @Override
     public void onCreate(SQLiteDatabase db) {
+
         db.execSQL("create table perfil(" +
                         "id integer primary key," +
                         "nombre text, " +
-                        "dni integer, " +
-                        "ciudad text, " +
-                        "numero integer)"
+                        "apellidos text, " +
+                        "dni text, " +
+                        "fecha_nacimiento text, " +
+                        "telefono integer, " +
+                        "movil integer, " +
+                        "direccion text, " +
+                        "email text)"
         );
 
         db.execSQL("create table login(id integer,login text primary key, pass text,FOREIGN KEY (id) REFERENCES perfil(id))");
@@ -33,8 +40,14 @@ public class AdminSQLiteOpenHelper extends SQLiteOpenHelper {
 
         // Pares clave-valor
         values.put("id", "1");
-        values.put("nombre", "Jose Robaina");
+        values.put("nombre", "Jose");
+        values.put("apellidos", "Robaina Travieso");
         values.put("dni", "45770424X");
+        values.put("fecha_nacimiento", "20/05/1987");
+        values.put("telefono", "92866666666");
+        values.put("movil", "66666666666");
+        values.put("direccion", "Las Palmas");
+        values.put("email", "jr_robaina@hotmail.com");
 
         // Insertar...
         db.insert("perfil", null, values);
@@ -55,9 +68,17 @@ public class AdminSQLiteOpenHelper extends SQLiteOpenHelper {
         db.execSQL("drop table if exists perfil");
         db.execSQL("create table perfil(" +
                 "id integer primary key," +
-                "nombre text," +
-                "dni integer," +
-                "ciudad text," +
-                "numero integer)");
+                "nombre text, " +
+                "apellidos text, " +
+                "dni text, " +
+                "fecha_nacimiento text, " +
+                "telefono integer, " +
+                "movil integer, " +
+                "direccion text, " +
+                "email text)"
+        );
+        db.execSQL("drop table if exists login");
+        db.execSQL("create table login(id integer,login text primary key, pass text,FOREIGN KEY (id) REFERENCES perfil(id))");
+
     }
 }

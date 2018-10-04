@@ -1,9 +1,10 @@
 <resources>
     <string name="app_name">Empleate</string>
+    <string name="login_name">LogIn</string>
+    <string name="profile_name">Mi Perfil</string>
     <string name="load_img">Loading</string>
     <string name="log_descriptio">Logo</string>
     <string name="title_activity_login">Iniciar Sesión</string>
-    <string name="profile_name">Mi Perfil</string>
     <string name="user_login">Usuario</string>
     <string name="pass_login">Contraseña</string>
     <string name="acceder_login">Acceder</string>
@@ -14,7 +15,12 @@
     <string name="mujer">Mujer</string>
     <string name="fecha_nac">Fecha Nacimiento</string>
     <string name="email">Email</string>
+    <string name="dni">DNI</string>
     <string name="telefono_fijo">Teléfono Fijo</string>
     <string name="telefono_movil">Teléfono Movil</string>
     <string name="direccion">Dirección</string>
+
+    <string name="acceso_listado">Listado de Ofertas</string>
+    <string name="acceso_perfil">Mi Perfil</string>
+    <string name="title_activity_main">MainActivity</string>
 </resources>

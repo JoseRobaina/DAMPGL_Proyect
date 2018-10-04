@@ -1,18 +1,26 @@
 package com.example.aplicacion2.empleate;
 
 import android.app.DatePickerDialog;
+import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.icu.util.Calendar;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -24,6 +32,15 @@ public class ProfileActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        String id = getIntent().getExtras().getString("id");
+
+        //ObtDatos(id);
+
+       /* EditText nombre = (EditText) findViewById(R.id.editTextNombre);
+        nombre.setText(id);*/
 
         final TextView DateNac = (TextView)findViewById(R.id.editTextFNac);
 
@@ -64,7 +81,7 @@ public class ProfileActivity extends AppCompatActivity {
             public boolean isEnabled(int position){
                 if(position == 0)
                 {
-                    // Disable the second item from Spinner
+                    // Disable the first item from Spinner
                     return false;
                 }
                 else
@@ -91,5 +108,36 @@ public class ProfileActivity extends AppCompatActivity {
 
         spinnerArrayAdapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
         spinner.setAdapter(spinnerArrayAdapter);
+
     }
+
+    @Override
+    public boolean onSupportNavigateUp() {
+        onBackPressed();
+        return false;
+    }
+/*
+    public void ObtDatos(String id) {
+
+        AdminSQLiteOpenHelper admin = new AdminSQLiteOpenHelper(this,null);
+
+        SQLiteDatabase bd = admin.getWritableDatabase();
+
+
+        Cursor fila = bd.rawQuery(
+                "select * from profile where id=" + id, null);
+
+        if (fila.moveToFirst()) {
+
+
+        } else {
+
+            Toast.makeText(this, "Usuario o Contraseña incorrecta",
+
+                    Toast.LENGTH_SHORT).show();
+        }
+        bd.close();
+
+    }*/
+
 }
