@@ -38,16 +38,16 @@ public class LoginActivity extends AppCompatActivity {
                 "select id from login where login='" + user + "' and pass ='" + pass +"'", null);
 
         if (fila.moveToFirst()) {
-            Intent intent = new Intent(getApplicationContext(), IndexActivity.class);
+            Intent intent = new Intent(getApplicationContext(), IndexDrawerActivity.class);
             intent.putExtra("id",fila.getString(0));
             startActivity(intent);
 
         } else {
-
             Toast.makeText(this, "Usuario o Contraseña incorrecta",
 
                     Toast.LENGTH_SHORT).show();
         }
+        fila.close();
         bd.close();
 
     }

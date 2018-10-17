@@ -8,6 +8,7 @@ import android.graphics.Color;
 import android.icu.util.Calendar;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
+import android.support.design.widget.TabLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -79,13 +80,11 @@ public class ProfileActivity extends AppCompatActivity {
                 this,R.layout.support_simple_spinner_dropdown_item,Estudios){
             @Override
             public boolean isEnabled(int position){
-                if(position == 0)
-                {
+                if(position == 0){
                     // Disable the first item from Spinner
                     return false;
                 }
-                else
-                {
+                else {
                     return true;
                 }
             }
@@ -138,6 +137,6 @@ public class ProfileActivity extends AppCompatActivity {
         }
         bd.close();
 
-    }*/
-
+    }
+*/
 }

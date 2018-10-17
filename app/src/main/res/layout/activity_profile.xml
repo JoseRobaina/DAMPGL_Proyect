@@ -4,11 +4,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ProfileActivity">
+    tools:context=".ProfileTabsActivity">
 
     <ScrollView
         android:layout_width="348dp"
-        android:layout_height="501dp"
+         android:layout_height="501dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
@@ -89,6 +89,7 @@
                     android:id="@+id/editTextFNac"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:clickable="false"
                     android:ems="10"
                     android:focusable="false"
                     android:hint="@string/fecha_nac"

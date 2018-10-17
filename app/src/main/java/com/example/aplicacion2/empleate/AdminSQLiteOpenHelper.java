@@ -10,7 +10,7 @@ import android.database.sqlite.SQLiteDatabase.CursorFactory;
 import android.database.sqlite.SQLiteOpenHelper;
 public class AdminSQLiteOpenHelper extends SQLiteOpenHelper {
 
-    public static final int DATABASE_VERSION = 1;
+    public static final int DATABASE_VERSION = 3;
     public static final String DATABASE_NAME = "Empleate.db";
 
     public AdminSQLiteOpenHelper(Context context, SQLiteDatabase.CursorFactory factory) {
@@ -66,7 +66,11 @@ public class AdminSQLiteOpenHelper extends SQLiteOpenHelper {
     @Override
     public void onUpgrade(SQLiteDatabase db, int version1, int version2) {
         db.execSQL("drop table if exists perfil");
-        db.execSQL("create table perfil(" +
+        db.execSQL("drop table if exists login");
+
+       onCreate(db);
+
+       /* db.execSQL("create table perfil(" +
                 "id integer primary key," +
                 "nombre text, " +
                 "apellidos text, " +
@@ -77,8 +81,8 @@ public class AdminSQLiteOpenHelper extends SQLiteOpenHelper {
                 "direccion text, " +
                 "email text)"
         );
-        db.execSQL("drop table if exists login");
-        db.execSQL("create table login(id integer,login text primary key, pass text,FOREIGN KEY (id) REFERENCES perfil(id))");
+
+        db.execSQL("create table login(id integer,login text primary key, pass text,FOREIGN KEY (id) REFERENCES perfil(id))");*/
 
     }
 }
