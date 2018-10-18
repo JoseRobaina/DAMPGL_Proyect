@@ -31,7 +31,8 @@
                     android:layout_height="match_parent"
                     android:ems="10"
                     android:hint="@string/nombre"
-                    android:inputType="textPersonName" />
+                    android:inputType="textPersonName"
+                    android:text="asdfasdf" />
             </android.support.design.widget.TextInputLayout>
 
             <android.support.design.widget.TextInputLayout
