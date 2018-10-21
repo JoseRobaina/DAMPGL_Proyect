@@ -1,13 +1,13 @@
 package com.example.aplicacion2.empleate;
 
 import android.app.DatePickerDialog;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.icu.util.Calendar;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.support.design.widget.TabLayout;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -26,15 +26,12 @@ import android.view.ViewGroup;
 
 import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
-import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
-
-import org.w3c.dom.Text;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
 
 public class ProfileTabsActivity extends AppCompatActivity {
@@ -49,6 +46,7 @@ public class ProfileTabsActivity extends AppCompatActivity {
      */
 
     public static String UserID;
+    public static int mPosition;
 
     private SectionsPagerAdapter mSectionsPagerAdapter;
 
@@ -100,6 +98,12 @@ public class ProfileTabsActivity extends AppCompatActivity {
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             return true;
+        } else if(id == R.id.action_save){
+            Toast.makeText(this, "Este boton proximamente guardara datos en la Base de Datos.",
+                    Toast.LENGTH_SHORT).show();
+        } else if(id == R.id.action_refresh){
+            Toast.makeText(this, "Este boton proximamente recargara los datos del formulario.",
+                    Toast.LENGTH_SHORT).show();
         }
 
         return super.onOptionsItemSelected(item);
@@ -133,14 +137,57 @@ public class ProfileTabsActivity extends AppCompatActivity {
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.activity_profile, container, false);
-            TextInputEditText nombre = rootView.findViewById(R.id.editTextNombre);
-            nombre.setText("Tiburcio");
-            Log.i("tiburcio", "editTextNombre");
-            CreateDatePicker(rootView);
-            CreateSpinnerEstudios(rootView);
 
-            return inflater.inflate(R.layout.activity_profile, container, false);
+            if(getArguments()!=null){
+                mPosition = getArguments().getInt(ARG_SECTION_NUMBER);
+            }
+
+            View FormTab1View = inflater.inflate(R.layout.fragment_profile_tab1, container, false);
+            View FormTab2View = inflater.inflate(R.layout.fragment_profile_tab2, container, false);
+            View FormTab3View = inflater.inflate(R.layout.fragment_profile_tab3, container, false);
+
+
+            LoadDataBD(FormTab1View);
+
+
+
+            CreateDatePicker(FormTab1View);
+            CreateSpinnerEstudios(FormTab1View);
+
+            switch (mPosition){
+                case 1:
+                    return FormTab1View;
+                case 2:
+                    return FormTab2View;
+                case 3:
+                    return FormTab3View;
+            }
+            return null;
+        }
+
+        private void LoadDataBD(View formTab1View) {
+            AdminSQLiteOpenHelper admin = new AdminSQLiteOpenHelper(getActivity(),null);
+            SQLiteDatabase bd = admin.getWritableDatabase();
+            Cursor fila = bd.rawQuery(" SELECT * FROM perfil WHERE id=" +UserID +"", null);
+
+            if (fila.moveToFirst()) {
+                TextInputEditText Nombre = formTab1View.findViewById(R.id.editTextNombre);
+                Nombre.setText(fila.getString(fila.getColumnIndex("nombre")));
+                TextInputEditText Apellidos = formTab1View.findViewById(R.id.editTextApellidos);
+                Apellidos.setText(fila.getString(fila.getColumnIndex("apellidos")));
+                TextInputEditText Dni = formTab1View.findViewById(R.id.editTextDni);
+                Dni.setText(fila.getString(fila.getColumnIndex("dni")));
+                TextInputEditText FNac = formTab1View.findViewById(R.id.editTextFNac);
+                FNac.setText(fila.getString(fila.getColumnIndex("fecha_nacimiento")));
+                TextInputEditText TFijo = formTab1View.findViewById(R.id.editTextTFijo);
+                TFijo.setText(fila.getString(fila.getColumnIndex("telefono")));
+                TextInputEditText Movil = formTab1View.findViewById(R.id.editTextMovil);
+                Movil.setText(fila.getString(fila.getColumnIndex("movil")));
+                TextInputEditText Direcc = formTab1View.findViewById(R.id.editTextDireccion);
+                Direcc.setText(fila.getString(fila.getColumnIndex("direccion")));
+                TextInputEditText Email = formTab1View.findViewById(R.id.editTextEmail);
+                Email.setText(fila.getString(fila.getColumnIndex("email")));
+            }
         }
 
         private void CreateSpinnerEstudios(View rootView) {
@@ -188,12 +235,10 @@ public class ProfileTabsActivity extends AppCompatActivity {
 
         private void CreateDatePicker(View rootView) {
             final TextInputEditText DateNac = rootView.findViewById(R.id.editTextFNac);
-            Log.i("tiburcio", "fuera del click");
             DateNac.setOnClickListener(new View.OnClickListener() {
                 @RequiresApi(api = Build.VERSION_CODES.N)
                 @Override
                 public void onClick(View v) {
-                    Log.i("tiburcio", "dentro del click");
                     Calendar c = Calendar.getInstance();
                     int Dia = c.get(Calendar.DAY_OF_MONTH);
                     int Mes = c.get(Calendar.MONTH);
@@ -236,5 +281,6 @@ public class ProfileTabsActivity extends AppCompatActivity {
             // Show 3 total pages.
             return 3;
         }
+
     }
 }
