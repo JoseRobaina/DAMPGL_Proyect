@@ -36,7 +36,7 @@ public class IndexDrawerActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        UserID = getIntent().getExtras().getString("id");
+        UserID = getIntent().getExtras().getString("Id");
     }
 
     @Override
@@ -81,7 +81,7 @@ public class IndexDrawerActivity extends AppCompatActivity
             Toast.makeText(this, "Funcionalidad no disponible",Toast.LENGTH_SHORT).show();
         } else if (id == R.id.nav_profile) {
             Intent intent = new Intent(getApplicationContext(), ProfileTabsActivity.class);
-            intent.putExtra("id",UserID);
+            intent.putExtra("Id",UserID);
             startActivity(intent);
         } else if (id == R.id.nav_slideshow) {
 

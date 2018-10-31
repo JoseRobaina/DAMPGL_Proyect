@@ -1,6 +1,7 @@
 package com.example.aplicacion2.empleate;
 
 import android.app.DatePickerDialog;
+import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
@@ -17,7 +18,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
-import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -29,6 +30,8 @@ import android.widget.DatePicker;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.example.aplicacion2.empleate.BDData.AdminSQLiteOpenHelper;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -60,7 +63,8 @@ public class ProfileTabsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile_tabs);
 
-        UserID = getIntent().getExtras().getString("id");
+        UserID = getIntent().getExtras().getString("Id");
+
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -77,6 +81,8 @@ public class ProfileTabsActivity extends AppCompatActivity {
 
         mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
         tabLayout.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(mViewPager));
+
+
 
     }
 
@@ -99,14 +105,47 @@ public class ProfileTabsActivity extends AppCompatActivity {
         if (id == R.id.action_settings) {
             return true;
         } else if(id == R.id.action_save){
-            Toast.makeText(this, "Este boton proximamente guardara datos en la Base de Datos.",
-                    Toast.LENGTH_SHORT).show();
+            UpdateProfile();
         } else if(id == R.id.action_refresh){
-            Toast.makeText(this, "Este boton proximamente recargara los datos del formulario.",
-                    Toast.LENGTH_SHORT).show();
+            finish();
+            startActivity(getIntent());
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private void UpdateProfile() {
+        AdminSQLiteOpenHelper admin = new AdminSQLiteOpenHelper(this,null);
+
+        SQLiteDatabase bd = admin.getWritableDatabase();
+
+        TextInputEditText VarNombre = (TextInputEditText) findViewById(R.id.editTextNombre);
+        TextInputEditText VarApeliidos = (TextInputEditText) findViewById(R.id.editTextApellidos);
+        TextInputEditText VarDni = (TextInputEditText) findViewById(R.id.editTextDni);
+        TextInputEditText VarFNac = (TextInputEditText) findViewById(R.id.editTextFNac);
+        TextInputEditText VarTlfno = (TextInputEditText) findViewById(R.id.editTextTFijo);
+        TextInputEditText VarMovil = (TextInputEditText) findViewById(R.id.editTextMovil);
+        TextInputEditText VarDirec = (TextInputEditText) findViewById(R.id.editTextDireccion);
+        TextInputEditText VarEmail = (TextInputEditText) findViewById(R.id.editTextEmail);
+
+        ContentValues values = new ContentValues();
+        values.put("nombre", VarNombre.getText().toString());
+        values.put("apellidos", VarApeliidos.getText().toString());
+        values.put("dni", VarDni.getText().toString());
+        values.put("fecha_nacimiento", VarFNac.getText().toString());
+        values.put("telefono", VarTlfno.getText().toString());
+        values.put("movil", VarMovil.getText().toString());
+        values.put("direccion", VarDirec.getText().toString());
+        values.put("email", VarEmail.getText().toString());
+        String[] args = new String[]{UserID};
+        bd.update("profile",values,"id=?",args);
+
+        Toast toast =
+                Toast.makeText(getApplicationContext(),
+                        "Datos Guardados Correctamente", Toast.LENGTH_SHORT);
+        toast.getView().setBackgroundResource(R.color.colorToast);
+        toast.setGravity(Gravity.CENTER,0,0);
+        toast.show();
     }
 
     /**
@@ -149,8 +188,6 @@ public class ProfileTabsActivity extends AppCompatActivity {
 
             LoadDataBD(FormTab1View);
 
-
-
             CreateDatePicker(FormTab1View);
             CreateSpinnerEstudios(FormTab1View);
 
@@ -168,7 +205,8 @@ public class ProfileTabsActivity extends AppCompatActivity {
         private void LoadDataBD(View formTab1View) {
             AdminSQLiteOpenHelper admin = new AdminSQLiteOpenHelper(getActivity(),null);
             SQLiteDatabase bd = admin.getWritableDatabase();
-            Cursor fila = bd.rawQuery(" SELECT * FROM perfil WHERE id=" +UserID +"", null);
+            String[] args = new String[]{UserID};
+            Cursor fila = bd.rawQuery(" SELECT * FROM profile WHERE id=?", args);
 
             if (fila.moveToFirst()) {
                 TextInputEditText Nombre = formTab1View.findViewById(R.id.editTextNombre);
@@ -188,6 +226,7 @@ public class ProfileTabsActivity extends AppCompatActivity {
                 TextInputEditText Email = formTab1View.findViewById(R.id.editTextEmail);
                 Email.setText(fila.getString(fila.getColumnIndex("email")));
             }
+            fila.close();
         }
 
         private void CreateSpinnerEstudios(View rootView) {
