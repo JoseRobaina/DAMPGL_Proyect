@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragment_profile_tab2">
+    tools:context=".ProfileTabsActivity">
 
     <ScrollView
         android:id="@+id/ScrollViewTitu"
@@ -29,15 +29,44 @@
 
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:hint="@string/text_titulacion">
+                android:layout_height="wrap_content">
 
                 <android.support.design.widget.TextInputEditText
-                    android:id="@+id/InputEditTextTitu2"
+                    android:id="@+id/InputEditTextCentro"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/text_titulacion2" />
+                    android:hint="@string/text_centro"
+                    android:inputType="text" />
             </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <android.support.design.widget.TextInputEditText
+                    android:id="@+id/InputEditTextMesFin"
+                    android:layout_width="84dp"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/text_mesfin"
+                    android:inputType="number"
+                    android:maxLength="2" />
+
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <android.support.design.widget.TextInputEditText
+                    android:id="@+id/InputEditTextAnyoFin"
+                    android:layout_width="84dp"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/text_anyofin"
+                    android:inputType="number"
+                    android:maxLength="4" />
+
+            </android.support.design.widget.TextInputLayout>
+
         </LinearLayout>
     </ScrollView>
 

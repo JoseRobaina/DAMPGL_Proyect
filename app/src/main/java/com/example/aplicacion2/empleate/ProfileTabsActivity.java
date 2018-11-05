@@ -3,6 +3,7 @@ package com.example.aplicacion2.empleate;
 import android.app.DatePickerDialog;
 import android.content.ContentValues;
 import android.database.Cursor;
+import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.icu.util.Calendar;
@@ -18,6 +19,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -127,6 +129,13 @@ public class ProfileTabsActivity extends AppCompatActivity {
         TextInputEditText VarMovil = (TextInputEditText) findViewById(R.id.editTextMovil);
         TextInputEditText VarDirec = (TextInputEditText) findViewById(R.id.editTextDireccion);
         TextInputEditText VarEmail = (TextInputEditText) findViewById(R.id.editTextEmail);
+        TextInputEditText VarTitulacion = (TextInputEditText) findViewById(R.id.InputEditTextTitu1);
+        TextInputEditText VarCentro = (TextInputEditText) findViewById(R.id.InputEditTextCentro);
+        TextInputEditText VarMesFin = (TextInputEditText) findViewById(R.id.InputEditTextMesFin);
+        TextInputEditText VarAnyoFin = (TextInputEditText) findViewById(R.id.InputEditTextAnyoFin);
+        /*TextInputEditText VarPuesto = (TextInputEditText) findViewById(R.id.InputEditTExtPuesto);
+        TextInputEditText VarEmpresa = (TextInputEditText) findViewById(R.id.InputEditTextEmpresa);
+        TextInputEditText VarMeses = (TextInputEditText) findViewById(R.id.InputEditTextMesesExp);*/
 
         ContentValues values = new ContentValues();
         values.put("nombre", VarNombre.getText().toString());
@@ -137,8 +146,41 @@ public class ProfileTabsActivity extends AppCompatActivity {
         values.put("movil", VarMovil.getText().toString());
         values.put("direccion", VarDirec.getText().toString());
         values.put("email", VarEmail.getText().toString());
+
+        long ExistTitu = DatabaseUtils.queryNumEntries(bd, "profile_titu");
+        long ExistExp = DatabaseUtils.queryNumEntries(bd, "profile_exp");
+
+        ContentValues valuesTit = new ContentValues();
+        if(ExistTitu == 0){
+            valuesTit.put("id_user",UserID);
+        }
+        valuesTit.put("titulacion", VarTitulacion.getText().toString());
+        valuesTit.put("centro", VarCentro.getText().toString());
+        valuesTit.put("mes_fin", VarMesFin.getText().toString());
+        valuesTit.put("anyo_fin", VarAnyoFin.getText().toString());
+
+       /* ContentValues valuesExp = new ContentValues();
+        if(ExistExp == 0){
+            valuesExp.put("id_user",UserID);
+        }
+        valuesExp.put("puesto", VarPuesto.getText().toString());
+        valuesExp.put("empresa", VarEmpresa.getText().toString());
+        valuesExp.put("meses", VarMeses.getText().toString());*/
+
         String[] args = new String[]{UserID};
         bd.update("profile",values,"id=?",args);
+
+        if(ExistTitu == 0){
+            bd.insert("profile_titu", null, valuesTit);
+        } else {
+            bd.update("profile_titu",valuesTit,"id_user=?",args);
+        }
+
+       /* if(ExistExp == 0){
+            bd.insert("profile_exp", null, valuesExp);
+        } else {
+            bd.update("profile_exp",valuesExp,"id_user=?",args);
+        }*/
 
         Toast toast =
                 Toast.makeText(getApplicationContext(),
@@ -185,48 +227,84 @@ public class ProfileTabsActivity extends AppCompatActivity {
             View FormTab2View = inflater.inflate(R.layout.fragment_profile_tab2, container, false);
             View FormTab3View = inflater.inflate(R.layout.fragment_profile_tab3, container, false);
 
-
-            LoadDataBD(FormTab1View);
-
             CreateDatePicker(FormTab1View);
             CreateSpinnerEstudios(FormTab1View);
 
             switch (mPosition){
                 case 1:
+                    LoadDataProfileBD(FormTab1View);
                     return FormTab1View;
                 case 2:
+                    LoadDataProfileTituBD(FormTab2View);
                     return FormTab2View;
                 case 3:
+                    LoadDataProfileExpBD(FormTab3View);
                     return FormTab3View;
             }
             return null;
         }
 
-        private void LoadDataBD(View formTab1View) {
+        private void LoadDataProfileBD(View formTab1View) {
             AdminSQLiteOpenHelper admin = new AdminSQLiteOpenHelper(getActivity(),null);
             SQLiteDatabase bd = admin.getWritableDatabase();
             String[] args = new String[]{UserID};
-            Cursor fila = bd.rawQuery(" SELECT * FROM profile WHERE id=?", args);
+            Cursor DataProfile = bd.rawQuery(" SELECT * FROM profile WHERE id=?", args);
 
-            if (fila.moveToFirst()) {
+            if (DataProfile.moveToFirst()) {
                 TextInputEditText Nombre = formTab1View.findViewById(R.id.editTextNombre);
-                Nombre.setText(fila.getString(fila.getColumnIndex("nombre")));
+                Nombre.setText(DataProfile.getString(DataProfile.getColumnIndex("nombre")));
                 TextInputEditText Apellidos = formTab1View.findViewById(R.id.editTextApellidos);
-                Apellidos.setText(fila.getString(fila.getColumnIndex("apellidos")));
+                Apellidos.setText(DataProfile.getString(DataProfile.getColumnIndex("apellidos")));
                 TextInputEditText Dni = formTab1View.findViewById(R.id.editTextDni);
-                Dni.setText(fila.getString(fila.getColumnIndex("dni")));
+                Dni.setText(DataProfile.getString(DataProfile.getColumnIndex("dni")));
                 TextInputEditText FNac = formTab1View.findViewById(R.id.editTextFNac);
-                FNac.setText(fila.getString(fila.getColumnIndex("fecha_nacimiento")));
+                FNac.setText(DataProfile.getString(DataProfile.getColumnIndex("fecha_nacimiento")));
                 TextInputEditText TFijo = formTab1View.findViewById(R.id.editTextTFijo);
-                TFijo.setText(fila.getString(fila.getColumnIndex("telefono")));
+                TFijo.setText(DataProfile.getString(DataProfile.getColumnIndex("telefono")));
                 TextInputEditText Movil = formTab1View.findViewById(R.id.editTextMovil);
-                Movil.setText(fila.getString(fila.getColumnIndex("movil")));
+                Movil.setText(DataProfile.getString(DataProfile.getColumnIndex("movil")));
                 TextInputEditText Direcc = formTab1View.findViewById(R.id.editTextDireccion);
-                Direcc.setText(fila.getString(fila.getColumnIndex("direccion")));
+                Direcc.setText(DataProfile.getString(DataProfile.getColumnIndex("direccion")));
                 TextInputEditText Email = formTab1View.findViewById(R.id.editTextEmail);
-                Email.setText(fila.getString(fila.getColumnIndex("email")));
+                Email.setText(DataProfile.getString(DataProfile.getColumnIndex("email")));
             }
-            fila.close();
+            DataProfile.close();
+        }
+
+        private void LoadDataProfileTituBD(View formTab2View) {
+            AdminSQLiteOpenHelper admin = new AdminSQLiteOpenHelper(getActivity(),null);
+            SQLiteDatabase bd = admin.getWritableDatabase();
+            String[] args = new String[]{UserID};
+            Cursor DataProfileTitu = bd.rawQuery(" SELECT * FROM profile_titu WHERE id_user=?", args);
+
+            if (DataProfileTitu.moveToFirst()) {
+                TextInputEditText Titulacion = formTab2View.findViewById(R.id.InputEditTextTitu1);
+                Titulacion.setText(DataProfileTitu.getString(DataProfileTitu.getColumnIndex("titulacion")));
+                TextInputEditText Centro = formTab2View.findViewById(R.id.InputEditTextCentro);
+                Centro.setText(DataProfileTitu.getString(DataProfileTitu.getColumnIndex("centro")));
+                TextInputEditText MesFin = formTab2View.findViewById(R.id.InputEditTextMesFin);
+                MesFin.setText(DataProfileTitu.getString(DataProfileTitu.getColumnIndex("mes_fin")));
+                TextInputEditText AnyoFin = formTab2View.findViewById(R.id.InputEditTextAnyoFin);
+                AnyoFin.setText(DataProfileTitu.getString(DataProfileTitu.getColumnIndex("anyo_fin")));
+            }
+            DataProfileTitu.close();
+        }
+
+        private void LoadDataProfileExpBD(View formTab3View) {
+            AdminSQLiteOpenHelper admin = new AdminSQLiteOpenHelper(getActivity(),null);
+            SQLiteDatabase bd = admin.getWritableDatabase();
+            String[] args = new String[]{UserID};
+            Cursor DataProfileTitu = bd.rawQuery(" SELECT * FROM profile_exp WHERE id_user=?", args);
+
+            if (DataProfileTitu.moveToFirst()) {
+                TextInputEditText Puesto = formTab3View.findViewById(R.id.InputEditTExtPuesto);
+                Puesto.setText(DataProfileTitu.getString(DataProfileTitu.getColumnIndex("puesto")));
+                TextInputEditText Empresa = formTab3View.findViewById(R.id.InputEditTextEmpresa);
+                Empresa.setText(DataProfileTitu.getString(DataProfileTitu.getColumnIndex("empresa")));
+                TextInputEditText Meses = formTab3View.findViewById(R.id.InputEditTextMesesExp);
+                Meses.setText(DataProfileTitu.getString(DataProfileTitu.getColumnIndex("meses")));
+            }
+            DataProfileTitu.close();
         }
 
         private void CreateSpinnerEstudios(View rootView) {

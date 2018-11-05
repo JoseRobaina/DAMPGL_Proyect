@@ -38,7 +38,10 @@ public class AdminSQLiteOpenHelper extends SQLiteOpenHelper {
         db.execSQL("create table profile_titu(id_titu integer not null primary key autoincrement, " +
                 "id_user integer not null, " +
                 "titulacion text," +
-                "FOREIGN KEY (id_user) REFERENCES perfil(id))"
+                "centro text, " +
+                "mes_fin integer, " +
+                "anyo_fin integer, " +
+                "FOREIGN KEY (id_user) REFERENCES profile(id))"
         );
 
         db.execSQL("create table profile_exp(id_exp integer not null primary key autoincrement, " +
@@ -46,7 +49,7 @@ public class AdminSQLiteOpenHelper extends SQLiteOpenHelper {
                 "puesto text not null," +
                 "empresa text not null," +
                 "meses integer," +
-                "FOREIGN KEY (id_user) REFERENCES perfil(id))"
+                "FOREIGN KEY (id_user) REFERENCES profile(id))"
         );
 
         db.execSQL("create table ofertas(id_oferta integer not null primary key autoincrement, " +
@@ -56,7 +59,9 @@ public class AdminSQLiteOpenHelper extends SQLiteOpenHelper {
 
         db.execSQL("create table inscripion_oferta(id_inscripcion integer not null primary key autoincrement, " +
                 "id_user integer not null, " +
-                "id_oferta integer not null)"
+                "id_oferta integer not null," +
+                "FOREIGN KEY (id_user) REFERENCES profile(id)," +
+                "FOREIGN KEY (id_oferta) REFERENCES ofertas(id_oferta))"
         );
 
         // Contenedor de valores
@@ -99,7 +104,7 @@ public class AdminSQLiteOpenHelper extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int version1, int version2) {
-        db.execSQL("drop table if exists perfil");
+        db.execSQL("drop table if exists profile");
         db.execSQL("drop table if exists login");
         db.execSQL("drop table if exists profile_titu");
         db.execSQL("drop table if exists profile_exp");
