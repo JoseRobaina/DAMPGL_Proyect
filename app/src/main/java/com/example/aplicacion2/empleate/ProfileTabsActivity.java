@@ -2,6 +2,7 @@ package com.example.aplicacion2.empleate;
 
 import android.app.DatePickerDialog;
 import android.content.ContentValues;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
@@ -59,13 +60,16 @@ public class ProfileTabsActivity extends AppCompatActivity {
      * The {@link ViewPager} that will host the section contents.
      */
     private ViewPager mViewPager;
+    private TabLayout tabLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile_tabs);
 
-        UserID = getIntent().getExtras().getString("Id");
+        //UserID = getIntent().getExtras().getString("Id");
+        SharedPreferences sp = getSharedPreferences("login",MODE_PRIVATE);
+        UserID = sp.getString("Id","");
 
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -79,12 +83,10 @@ public class ProfileTabsActivity extends AppCompatActivity {
         mViewPager = (ViewPager) findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
 
-        TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
+        tabLayout = (TabLayout) findViewById(R.id.tabs);
 
         mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
         tabLayout.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(mViewPager));
-
-
 
     }
 

@@ -61,7 +61,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private void goToIndex(String Id) {
         Intent intent = new Intent(getApplicationContext(), IndexDrawerActivity.class);
-        intent.putExtra("Id",Id);
+        //intent.putExtra("Id",Id);
         startActivity(intent);
     }
 }

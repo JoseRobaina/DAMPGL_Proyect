@@ -1,6 +1,7 @@
 package com.example.aplicacion2.empleate;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -36,7 +37,9 @@ public class IndexDrawerActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        UserID = getIntent().getExtras().getString("Id");
+        //UserID = getIntent().getExtras().getString("Id");
+        SharedPreferences sp = getSharedPreferences("login",MODE_PRIVATE);
+        UserID = sp.getString("Id","");
     }
 
     @Override

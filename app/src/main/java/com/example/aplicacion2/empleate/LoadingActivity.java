@@ -49,7 +49,7 @@ public class LoadingActivity extends AppCompatActivity {
 
     private void goToIndex(String id) {
         Intent intent = new Intent(getApplicationContext(), IndexDrawerActivity.class);
-        intent.putExtra("Id",id);
+        //intent.putExtra("Id",id);
         startActivity(intent);
     }
 }
