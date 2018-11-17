@@ -82,6 +82,7 @@ public class ProfileTabsActivity extends AppCompatActivity {
         // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
+        mViewPager.setOffscreenPageLimit(2);
 
         tabLayout = (TabLayout) findViewById(R.id.tabs);
 
@@ -135,9 +136,9 @@ public class ProfileTabsActivity extends AppCompatActivity {
         TextInputEditText VarCentro = (TextInputEditText) findViewById(R.id.InputEditTextCentro);
         TextInputEditText VarMesFin = (TextInputEditText) findViewById(R.id.InputEditTextMesFin);
         TextInputEditText VarAnyoFin = (TextInputEditText) findViewById(R.id.InputEditTextAnyoFin);
-        /*TextInputEditText VarPuesto = (TextInputEditText) findViewById(R.id.InputEditTExtPuesto);
+        TextInputEditText VarPuesto = (TextInputEditText) findViewById(R.id.InputEditTExtPuesto);
         TextInputEditText VarEmpresa = (TextInputEditText) findViewById(R.id.InputEditTextEmpresa);
-        TextInputEditText VarMeses = (TextInputEditText) findViewById(R.id.InputEditTextMesesExp);*/
+        TextInputEditText VarMeses = (TextInputEditText) findViewById(R.id.InputEditTextMesesExp);
 
         ContentValues values = new ContentValues();
         values.put("nombre", VarNombre.getText().toString());
@@ -161,13 +162,13 @@ public class ProfileTabsActivity extends AppCompatActivity {
         valuesTit.put("mes_fin", VarMesFin.getText().toString());
         valuesTit.put("anyo_fin", VarAnyoFin.getText().toString());
 
-       /* ContentValues valuesExp = new ContentValues();
+        ContentValues valuesExp = new ContentValues();
         if(ExistExp == 0){
             valuesExp.put("id_user",UserID);
         }
         valuesExp.put("puesto", VarPuesto.getText().toString());
         valuesExp.put("empresa", VarEmpresa.getText().toString());
-        valuesExp.put("meses", VarMeses.getText().toString());*/
+        valuesExp.put("meses", VarMeses.getText().toString());
 
         String[] args = new String[]{UserID};
         bd.update("profile",values,"id=?",args);
@@ -178,11 +179,11 @@ public class ProfileTabsActivity extends AppCompatActivity {
             bd.update("profile_titu",valuesTit,"id_user=?",args);
         }
 
-       /* if(ExistExp == 0){
+        if(ExistExp == 0){
             bd.insert("profile_exp", null, valuesExp);
         } else {
             bd.update("profile_exp",valuesExp,"id_user=?",args);
-        }*/
+        }
 
         Toast toast =
                 Toast.makeText(getApplicationContext(),
